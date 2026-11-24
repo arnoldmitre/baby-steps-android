@@ -1,0 +1,322 @@
+[
+  {
+    "week": 1,
+    "fruit": "Poppy Seed",
+    "emoji": "\ud83c\udf31",
+    "length": "0.1 cm",
+    "weight": "< 1 g",
+    "fact": "Fertilization and implantation journey starts!"
+  },
+  {
+    "week": 2,
+    "fruit": "Poppy Seed",
+    "emoji": "\ud83c\udf31",
+    "length": "0.1 cm",
+    "weight": "< 1 g",
+    "fact": "Cells rapidly dividing and forming the blastocyst."
+  },
+  {
+    "week": 3,
+    "fruit": "Vanilla Bean",
+    "emoji": "\u2728",
+    "length": "0.2 cm",
+    "weight": "< 1 g",
+    "fact": "Implantation into the uterine lining."
+  },
+  {
+    "week": 4,
+    "fruit": "Poppy Seed",
+    "emoji": "\ud83c\udf31",
+    "length": "0.1 cm",
+    "weight": "< 1 g",
+    "fact": "Neural tube is beginning to form."
+  },
+  {
+    "week": 5,
+    "fruit": "Sesame Seed",
+    "emoji": "\ud83c\udf30",
+    "length": "0.2 cm",
+    "weight": "< 1 g",
+    "fact": "Tiny heart begins to beat and pump blood!"
+  },
+  {
+    "week": 6,
+    "fruit": "Lentil",
+    "emoji": "\ud83e\uded8",
+    "length": "0.5 cm",
+    "weight": "< 1 g",
+    "fact": "Facial features, eyes, and ears start forming."
+  },
+  {
+    "week": 7,
+    "fruit": "Blueberry",
+    "emoji": "\ud83e\uded0",
+    "length": "1.0 cm",
+    "weight": "1 g",
+    "fact": "Brain is generating 100 new nerve cells per minute!"
+  },
+  {
+    "week": 8,
+    "fruit": "Raspberry",
+    "emoji": "\ud83c\udf53",
+    "length": "1.6 cm",
+    "weight": "1 g",
+    "fact": "Webbed fingers and toes are starting to separate."
+  },
+  {
+    "week": 9,
+    "fruit": "Green Olive",
+    "emoji": "\ud83e\uded2",
+    "length": "2.3 cm",
+    "weight": "2 g",
+    "fact": "Tiny joints in arms and legs can already flex!"
+  },
+  {
+    "week": 10,
+    "fruit": "Prune",
+    "emoji": "\ud83c\udf47",
+    "length": "3.1 cm",
+    "weight": "4 g",
+    "fact": "Vital organs formed; bones and cartilage start developing."
+  },
+  {
+    "week": 11,
+    "fruit": "Lime",
+    "emoji": "\ud83c\udf4b",
+    "length": "4.1 cm",
+    "weight": "7 g",
+    "fact": "Baby can open and close tiny fists!"
+  },
+  {
+    "week": 12,
+    "fruit": "Plum",
+    "emoji": "\ud83c\udf51",
+    "length": "5.4 cm",
+    "weight": "14 g",
+    "fact": "Reflexes active; baby curls toes and hiccups."
+  },
+  {
+    "week": 13,
+    "fruit": "Lemon",
+    "emoji": "\ud83c\udf4b",
+    "length": "7.4 cm",
+    "weight": "23 g",
+    "fact": "Welcome to Trimester 2! Unique fingerprints formed."
+  },
+  {
+    "week": 14,
+    "fruit": "Nectarine",
+    "emoji": "\ud83c\udf51",
+    "length": "8.7 cm",
+    "weight": "43 g",
+    "fact": "Baby can squint, frown, and make facial expressions."
+  },
+  {
+    "week": 15,
+    "fruit": "Apple",
+    "emoji": "\ud83c\udf4e",
+    "length": "10.1 cm",
+    "weight": "70 g",
+    "fact": "Baby can sense light through eyelids!"
+  },
+  {
+    "week": 16,
+    "fruit": "Avocado",
+    "emoji": "\ud83e\udd51",
+    "length": "11.6 cm",
+    "weight": "100 g",
+    "fact": "Legs are now longer than arms; kicking starts!"
+  },
+  {
+    "week": 17,
+    "fruit": "Pomegranate",
+    "emoji": "\ud83e\uded0",
+    "length": "13.0 cm",
+    "weight": "140 g",
+    "fact": "Skeleton transforming from soft cartilage to bone."
+  },
+  {
+    "week": 18,
+    "fruit": "Bell Pepper",
+    "emoji": "\ud83e\uded1",
+    "length": "14.2 cm",
+    "weight": "190 g",
+    "fact": "Baby can hear your voice and heartbeat!"
+  },
+  {
+    "week": 19,
+    "fruit": "Mango",
+    "emoji": "\ud83e\udd6d",
+    "length": "15.3 cm",
+    "weight": "240 g",
+    "fact": "Vernix caseosa coating develops to protect delicate skin."
+  },
+  {
+    "week": 20,
+    "fruit": "Banana",
+    "emoji": "\ud83c\udf4c",
+    "length": "25.6 cm",
+    "weight": "300 g",
+    "fact": "Halfway there! Gender can typically be seen on ultrasound."
+  },
+  {
+    "week": 21,
+    "fruit": "Carrot",
+    "emoji": "\ud83e\udd55",
+    "length": "26.7 cm",
+    "weight": "360 g",
+    "fact": "Taste buds are active and baby swallows amniotic fluid."
+  },
+  {
+    "week": 22,
+    "fruit": "Papaya",
+    "emoji": "\ud83c\udf48",
+    "length": "27.8 cm",
+    "weight": "430 g",
+    "fact": "Grip strength is developing and senses heighten."
+  },
+  {
+    "week": 23,
+    "fruit": "Grapefruit",
+    "emoji": "\ud83c\udf4a",
+    "length": "28.9 cm",
+    "weight": "500 g",
+    "fact": "Baby moves to the rhythm of external music!"
+  },
+  {
+    "week": 24,
+    "fruit": "Cantaloupe",
+    "emoji": "\ud83c\udf48",
+    "length": "30.0 cm",
+    "weight": "600 g",
+    "fact": "Viability milestone reached; lungs forming air sacs."
+  },
+  {
+    "week": 25,
+    "fruit": "Cauliflower",
+    "emoji": "\ud83e\udd66",
+    "length": "34.6 cm",
+    "weight": "660 g",
+    "fact": "Baby can respond to familiar voices with kicks!"
+  },
+  {
+    "week": 26,
+    "fruit": "Lettuce",
+    "emoji": "\ud83e\udd6c",
+    "length": "35.6 cm",
+    "weight": "760 g",
+    "fact": "Eyelids open for the first time and eyelashes grow."
+  },
+  {
+    "week": 27,
+    "fruit": "Broccoli",
+    "emoji": "\ud83e\udd66",
+    "length": "36.6 cm",
+    "weight": "875 g",
+    "fact": "Welcome to Trimester 3! Rapid brain growth spurt."
+  },
+  {
+    "week": 28,
+    "fruit": "Eggplant",
+    "emoji": "\ud83c\udf46",
+    "length": "37.6 cm",
+    "weight": "1.0 kg",
+    "fact": "REM sleep cycles begin; baby may even dream!"
+  },
+  {
+    "week": 29,
+    "fruit": "Acorn Squash",
+    "emoji": "\ud83c\udf83",
+    "length": "38.6 cm",
+    "weight": "1.2 kg",
+    "fact": "Bones are absorbing lots of calcium to get strong."
+  },
+  {
+    "week": 30,
+    "fruit": "Cabbage",
+    "emoji": "\ud83e\udd6c",
+    "length": "39.9 cm",
+    "weight": "1.3 kg",
+    "fact": "Eyes can focus and follow a light source."
+  },
+  {
+    "week": 31,
+    "fruit": "Pineapple",
+    "emoji": "\ud83c\udf4d",
+    "length": "41.1 cm",
+    "weight": "1.5 kg",
+    "fact": "Practicing respiratory breathing movements continuously."
+  },
+  {
+    "week": 32,
+    "fruit": "Jicama",
+    "emoji": "\ud83e\udd54",
+    "length": "42.4 cm",
+    "weight": "1.7 kg",
+    "fact": "Fingernails and toenails have fully grown!"
+  },
+  {
+    "week": 33,
+    "fruit": "Celery",
+    "emoji": "\ud83e\udd6c",
+    "length": "43.7 cm",
+    "weight": "1.9 kg",
+    "fact": "Immune system antibodies transferring from mom."
+  },
+  {
+    "week": 34,
+    "fruit": "Butternut Squash",
+    "emoji": "\ud83c\udf60",
+    "length": "45.0 cm",
+    "weight": "2.1 kg",
+    "fact": "Most babies settle into the head-down position."
+  },
+  {
+    "week": 35,
+    "fruit": "Honeydew",
+    "emoji": "\ud83c\udf48",
+    "length": "46.2 cm",
+    "weight": "2.4 kg",
+    "fact": "Kidneys and liver are fully functional and working."
+  },
+  {
+    "week": 36,
+    "fruit": "Romaine Lettuce",
+    "emoji": "\ud83e\udd6c",
+    "length": "47.4 cm",
+    "weight": "2.6 kg",
+    "fact": "Lungs are almost fully matured and ready for air."
+  },
+  {
+    "week": 37,
+    "fruit": "Swiss Chard",
+    "emoji": "\ud83c\udf31",
+    "length": "48.6 cm",
+    "weight": "2.9 kg",
+    "fact": "Early term! Baby is practicing grasping and sucking."
+  },
+  {
+    "week": 38,
+    "fruit": "Winter Melon",
+    "emoji": "\ud83c\udf48",
+    "length": "49.8 cm",
+    "weight": "3.1 kg",
+    "fact": "Firm grasp reflex; organs ready for outside world."
+  },
+  {
+    "week": 39,
+    "fruit": "Mini Watermelon",
+    "emoji": "\ud83c\udf49",
+    "length": "50.7 cm",
+    "weight": "3.3 kg",
+    "fact": "Full term! Skin is smooth and chubby with baby fat."
+  },
+  {
+    "week": 40,
+    "fruit": "Watermelon",
+    "emoji": "\ud83c\udf49",
+    "length": "51.2 cm",
+    "weight": "3.5 kg",
+    "fact": "Due Date arrived! Ready to meet the world! \ud83c\udf89"
+  }
+]

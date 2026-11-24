@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Baby Steps</string>
+    <string name="widget_name">Baby Steps Timeline</string>
+    <string name="widget_description">Retro 8-bit pregnancy and milestone progress tracker</string>
+</resources>

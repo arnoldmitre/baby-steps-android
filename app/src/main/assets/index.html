@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Baby Steps</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Top Widget Preview Card -->
+    <div class="card widget-card">
+      <div class="widget-header">
+        <div class="badge-group">
+          <span class="badge badge-week" id="badgeWeek">🎀 WK 26</span>
+          <span class="badge badge-trimester" id="badgeTrimester">2ND TRI</span>
+          <span class="badge badge-name" id="badgeName">🎀 SARA</span>
+        </div>
+        <div class="steppers">
+          <button class="step-btn" id="btnMinus" aria-label="Decrease week">-</button>
+          <button class="step-btn" id="btnPlus" aria-label="Increase week">+</button>
+        </div>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="trackCanvas" width="700" height="180"></canvas>
+      </div>
+
+      <div class="widget-footer">
+        <div class="footer-left">
+          <span id="footerFruit">🎀 Sara • Lettuce (35.6 cm)</span>
+        </div>
+        <div class="footer-right">
+          <span class="countdown-text" id="footerDays">100d left (14w)</span>
+          <span class="pct-text" id="footerPct">• 65%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nursery Room Card (Tamagotchi View) -->
+    <div class="card nursery-card">
+      <div class="nursery-wrapper">
+        <canvas id="nurseryCanvas" width="700" height="280"></canvas>
+      </div>
+    </div>
+
+    <!-- Sleep Status Banner (Dynamic) -->
+    <div class="status-banner banner-sleep" id="sleepBanner" style="display: none;">
+      <span class="banner-icon">🌙</span>
+      <div class="banner-text">
+        <div class="banner-title" id="sleepBannerTitle">SARA IS SLEEPING SOUNDLY</div>
+        <div class="banner-sub">Resting peacefully through the night</div>
+      </div>
+      <button class="mini-action-btn" id="btnWakeUp">Wake Up 👶</button>
+    </div>
+
+    <!-- Music Status Banner (Dynamic) -->
+    <div class="status-banner banner-music" id="musicBanner" style="display: none;">
+      <span class="banner-icon">🎶</span>
+      <div class="banner-text">
+        <div class="banner-title" id="musicBannerTitle">SARA IS DANCING TO THE BEAT!</div>
+        <div class="banner-sub">Joyful retro groove animation active</div>
+      </div>
+      <button class="mini-action-btn" id="btnToggleDance">Dance: ON</button>
+    </div>
+
+    <!-- Baby Name & Gender Card -->
+    <div class="card settings-card">
+      <div class="card-row">
+        <span class="label">BABY NAME</span>
+        <span class="sub-label" id="labelGenderDisplay">It's a Girl! 🎀</span>
+      </div>
+      <div class="input-box">
+        <input type="text" id="inputBabyName" placeholder="Enter baby name (e.g. Sara)" value="Sara" maxlength="20" />
+      </div>
+
+      <div class="card-row" style="margin-top: 10px;">
+        <span class="label">BABY GENDER</span>
+      </div>
+      <div class="btn-group">
+        <button class="toggle-btn active" id="btnGenderGirl">🎀 Girl</button>
+        <button class="toggle-btn" id="btnGenderBoy">🧢 Boy</button>
+        <button class="toggle-btn" id="btnGenderSurprise">💛 Surprise</button>
+      </div>
+    </div>
+
+    <!-- Solar Day & Sleep Cycle Card -->
+    <div class="card settings-card">
+      <div class="card-row">
+        <div>
+          <div class="label">SOLAR DAY & SLEEP CYCLE</div>
+          <div class="sub-label">Simulates peaceful night sleep & daylight play</div>
+        </div>
+        <span class="chip-badge" id="chipSleepState">☀️ AWAKE</span>
+      </div>
+      <div class="btn-group" style="margin-top: 8px;">
+        <button class="toggle-btn active" id="btnSleepAuto">Auto (Day ☀️)</button>
+        <button class="toggle-btn" id="btnSleepForce">Force Sleep 😴</button>
+        <button class="toggle-btn" id="btnSleepAwake">Force Awake 👶</button>
+      </div>
+    </div>
+
+    <!-- Music Beat Reaction Card -->
+    <div class="card settings-card">
+      <div class="card-row">
+        <div>
+          <div class="label">MUSIC BEAT REACTION</div>
+          <div class="sub-label">Preview baby bouncing & dancing to the rhythm</div>
+        </div>
+        <button class="toggle-btn action-btn" id="btnMusicPreview">🎵 Preview Beat</button>
+      </div>
+    </div>
+
+    <!-- Pregnancy Dates & Due Date Card -->
+    <div class="card settings-card">
+      <div class="card-row">
+        <span class="label">PREGNANCY DATES & DUE DATE</span>
+        <button class="mode-pill-btn" id="btnDateModeToggle">📅 By Dates (Active)</button>
+      </div>
+
+      <!-- Start Date Field -->
+      <div class="field-group">
+        <div class="field-label-row">
+          <span>Start Date (LMP / Conception)</span>
+          <span class="highlight-date" id="lblStartDate">May 28, 2026</span>
+        </div>
+        <div class="input-box">
+          <input type="date" id="inputStartDate" />
+        </div>
+        <div class="presets-row">
+          <button class="preset-btn" id="presetStartToday">Today</button>
+          <button class="preset-btn" id="presetStart12w">-12 Wks</button>
+          <button class="preset-btn" id="presetStart24w">-24 Wks</button>
+          <button class="preset-btn preset-accent" id="presetStart40wFromDue">-40w from Due</button>
+        </div>
+      </div>
+
+      <!-- Due Date Field -->
+      <div class="field-group" style="margin-top: 10px;">
+        <div class="field-label-row">
+          <span>End Date (Estimated Due Date)</span>
+          <span class="highlight-date" id="lblDueDate">Mar 4, 2027</span>
+        </div>
+        <div class="input-box">
+          <input type="date" id="inputDueDate" />
+        </div>
+        <div class="presets-row">
+          <button class="preset-btn preset-accent" id="presetDue40wFromStart">+40w from Start</button>
+          <button class="preset-btn" id="presetDue16w">+16 Wks</button>
+          <button class="preset-btn" id="presetDue28w">+28 Wks</button>
+          <button class="preset-btn preset-danger" id="presetDueClear">Clear</button>
+        </div>
+      </div>
+
+      <div class="summary-pill" id="dateSummaryPill">
+        <span id="dateSummaryText">Auto-calculated: 180 days pregnant (100d left)</span>
+        <span class="summary-pct" id="dateSummaryPct">65%</span>
+      </div>
+    </div>
+
+    <!-- Manual Week Slider Card -->
+    <div class="card settings-card">
+      <div class="card-row">
+        <span class="label">MANUAL WEEK OVERRIDE</span>
+        <span class="week-highlight" id="lblSliderWeek">WEEK 26</span>
+      </div>
+      <input type="range" min="1" max="40" value="26" class="slider" id="weekSlider" />
+      <div class="presets-row" style="margin-top: 8px;">
+        <button class="preset-btn" id="jumpTri1">1st Tri (8w)</button>
+        <button class="preset-btn" id="jumpTri2">2nd Tri (20w)</button>
+        <button class="preset-btn" id="jumpTri3">3rd Tri (32w)</button>
+        <button class="preset-btn preset-green" id="jumpDue">Due (40w)</button>
+      </div>
+    </div>
+
+    <!-- Developmental Milestones Card -->
+    <div class="card milestone-card">
+      <div class="milestone-header">
+        <span class="milestone-emoji" id="milestoneEmoji">🍈</span>
+        <div>
+          <div class="milestone-title" id="milestoneFruit">SIZE: LETTUCE</div>
+          <div class="milestone-sub" id="milestoneSize">Length: ~35.6 cm • Weight: ~760 g</div>
+        </div>
+      </div>
+      <p class="milestone-fact" id="milestoneFact">Baby is developing rapid eye movement (REM) sleep, and auditory responses grow stronger each day!</p>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
