@@ -6,9 +6,13 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.widget.RemoteViews
 import org.json.JSONArray
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import kotlin.math.max
@@ -22,6 +26,207 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
+
+        private val crawlSprite = arrayOf(
+            ".........booby....",
+            ".........ybbssy...",
+            "........yssssssy..",
+            ".......yssskwssy..",
+            ".......yssskkssss.",
+            ".......ysccsssss..",
+            ".......ssssssmss..",
+            "...wwwwwwsssss....",
+            "..wwwwwwwwssss....",
+            ".wwuwwwwww.ss.ee..",
+            ".wdddddddw.ss.ee..",
+            "..sssssddw.ss.ee..",
+            "...ss...ss.ss.ss.."
+        )
+
+        private val sleepSprite = arrayOf(
+            ".........booby....",
+            ".........ybbssy...",
+            "........yssssssy..",
+            ".......ysssssssy..",
+            ".......yssskkkss..",
+            ".......ysccsssss..",
+            ".......ssssssmss..",
+            "..wwwwwwwsssss....",
+            ".wwwwwwwwwssss....",
+            ".wwuwwwwww.sssss..",
+            ".wdddddddw..sssss.",
+            "..sssssddw...sss..",
+            "...sssssss........"
+        )
+
+        private val cribSprite = arrayOf(
+            ".......rr.........",
+            "......rrrr........",
+            ".......rr.........",
+            ".......mm.........",
+            "...yyyyyyyyyyy....",
+            "..y...........y...",
+            "..y.wwwwwwwww.y...",
+            "..y.wwwwwwwww.y...",
+            "..y.m.m.m.m.m.y...",
+            "..y.m.m.m.m.m.y...",
+            "..y.m.m.m.m.m.y...",
+            "..yyyyyyyyyyyyy...",
+            "..y...........y...",
+            "..y...........y...",
+            "..y...........y..."
+        )
+
+        private val moonSprite = arrayOf(
+            "...yyyy",
+            "..yy...",
+            ".yy....",
+            ".yy....",
+            ".yy....",
+            "..yy...",
+            "...yyyy"
+        )
+
+        private val smallZSprite = arrayOf(
+            "zzzz",
+            "..z.",
+            ".z..",
+            "zzzz"
+        )
+
+        private fun getPalette(gender: String): Map<Char, Int> {
+            val isGirl = gender == "girl"
+            val isBoy = gender == "boy"
+            return mapOf(
+                'k' to 0xFF281919.toInt(),
+                'w' to 0xFFFFFFFF.toInt(),
+                's' to 0xFFFEDBC0.toInt(),
+                'e' to 0xFFE8B696.toInt(),
+                'c' to (if (isGirl) 0xFFFB7185.toInt() else 0xFFFF90A2.toInt()),
+                'm' to (if (isGirl) 0xFFF472B6.toInt() else 0xFF38BDF8.toInt()),
+                'd' to (if (isGirl) 0xFFE9A9CB.toInt() else 0xFF93C5FD.toInt()),
+                'y' to 0xFFF5B041.toInt(),
+                'b' to (if (isGirl) 0xFFF472B6.toInt() else 0xFFF5B041.toInt()),
+                'o' to (if (isGirl) 0xFFFDA4AF.toInt() else 0xFFF5B041.toInt()),
+                'u' to (if (isGirl) 0xFFF472B6.toInt() else if (isBoy) 0xFF60A5FA.toInt() else 0xFFFBBF24.toInt()),
+                'p' to 0xFFF43F5E.toInt(),
+                'r' to (if (isGirl) 0xFFFB7185.toInt() else 0xFFEF4444.toInt()),
+                'z' to 0xFF818CF8.toInt(),
+                'g' to 0xFF22C55E.toInt()
+            )
+        }
+
+        private fun drawSprite(
+            canvas: Canvas,
+            sprite: Array<String>,
+            x: Float,
+            y: Float,
+            scale: Float,
+            palette: Map<Char, Int>,
+            paint: Paint
+        ) {
+            for (r in sprite.indices) {
+                val row = sprite[r]
+                for (c in row.indices) {
+                    val ch = row[c]
+                    if (ch != '.' && palette.containsKey(ch)) {
+                        paint.color = palette[ch]!!
+                        canvas.drawRect(
+                            x + c * scale,
+                            y + r * scale,
+                            x + (c + 1) * scale,
+                            y + (r + 1) * scale,
+                            paint
+                        )
+                    }
+                }
+            }
+        }
+
+        private fun renderTrackBitmap(context: Context, safeWeeks: Int, progressPct: Int, gender: String): Bitmap {
+            val width = 600
+            val height = 130
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val paint = Paint().apply { isAntiAlias = false }
+
+            val palette = getPalette(gender)
+            val isGirl = gender == "girl"
+
+            // Dark rounded container background
+            paint.color = 0xAA0A0F1A.toInt()
+            canvas.drawRoundRect(0f, 0f, width.toFloat(), height.toFloat(), 16f, 16f, paint)
+
+            val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            val isNight = hour < 7 || hour >= 20
+
+            val groundY = height - 20f
+            val trackStartX = 18f
+            val cribScale = 2.4f
+            val cribW = 18f * cribScale
+            val trackEndX = width - cribW - 20f
+            val trackLen = max(20f, trackEndX - trackStartX)
+
+            // Night sky stars and moon
+            if (isNight) {
+                paint.color = 0x99090D16.toInt()
+                canvas.drawRect(0f, 0f, width.toFloat(), groundY + 8f, paint)
+                drawSprite(canvas, moonSprite, trackEndX - 30f, 6f, 1.8f, palette, paint)
+
+                paint.color = 0xDDFDE047.toInt()
+                canvas.drawRect(trackStartX + trackLen * 0.15f, 10f, trackStartX + trackLen * 0.15f + 3f, 13f, paint)
+                canvas.drawRect(trackStartX + trackLen * 0.42f, 8f, trackStartX + trackLen * 0.42f + 3f, 11f, paint)
+                canvas.drawRect(trackStartX + trackLen * 0.72f, 14f, trackStartX + trackLen * 0.72f + 3f, 17f, paint)
+            }
+
+            // Checkered track dots
+            val dotsCount = (trackLen / 12f).toInt()
+            for (i in 0 until dotsCount) {
+                val dotX = trackStartX + i * 12f
+                paint.color = if (i % 2 == 0) (if (isGirl) 0x88F472B6.toInt() else 0x8860A5FA.toInt()) else 0x44FFFFFF.toInt()
+                canvas.drawRect(dotX, groundY + 4f, dotX + 6f, groundY + 7f, paint)
+            }
+
+            // Milestones markers (w10, w20, w30)
+            paint.color = 0x66FFFFFF.toInt()
+            canvas.drawRect(trackStartX + trackLen * 0.25f, groundY - 2f, trackStartX + trackLen * 0.25f + 2f, groundY + 7f, paint)
+            paint.color = if (isGirl) 0xCCF472B6.toInt() else 0xCC60A5FA.toInt()
+            canvas.drawRect(trackStartX + trackLen * 0.5f, groundY - 5f, trackStartX + trackLen * 0.5f + 3f, groundY + 9f, paint)
+            paint.color = 0x66FFFFFF.toInt()
+            canvas.drawRect(trackStartX + trackLen * 0.75f, groundY - 2f, trackStartX + trackLen * 0.75f + 2f, groundY + 7f, paint)
+
+            // Due date crib at track end
+            val cribX = width - cribW - 12f
+            val cribY = groundY - 15f * cribScale + 6f
+            drawSprite(canvas, cribSprite, cribX, cribY, cribScale, palette, paint)
+
+            // Floating heart above crib
+            paint.color = if (isGirl) 0xFFFB7185.toInt() else 0xFFEF4444.toInt()
+            canvas.drawRect(cribX + 7f * cribScale, cribY - 8f, cribX + 7f * cribScale + 5f, cribY - 3f, paint)
+
+            // Baby position on track
+            val babyPct = (progressPct / 100f).coerceIn(0f, 1f)
+            val babyX = trackStartX + babyPct * (trackLen - 30f)
+            val scaleFactor = when {
+                safeWeeks <= 12 -> 2.0f
+                safeWeeks <= 26 -> 2.4f
+                safeWeeks <= 36 -> 2.7f
+                else -> 3.0f
+            }
+            val babyY = groundY - 13f * scaleFactor + 6f
+            val sprite = if (isNight) sleepSprite else crawlSprite
+            drawSprite(canvas, sprite, babyX, babyY, scaleFactor, palette, paint)
+
+            // Floating Zzz if sleeping at night
+            if (isNight) {
+                val zX = babyX + 16f * scaleFactor
+                val zY = groundY - 14f * scaleFactor - 4f
+                drawSprite(canvas, smallZSprite, zX, zY, 1.4f, palette, paint)
+            }
+
+            return bitmap
+        }
+
         fun updateAllWidgets(context: Context) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val thisWidget = ComponentName(context, BabyStepsWidgetProvider::class.java)
@@ -89,6 +294,10 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             views.setProgressBar(R.id.widget_progress, 100, progressPct, false)
             views.setTextViewText(R.id.tv_widget_fruit, "$icon $babyName • $fruitName ($fruitLength)")
             views.setTextViewText(R.id.tv_widget_percent, "$progressPct%")
+
+            // Render and set the 8-bit Track Canvas with crawling baby & crib
+            val trackBitmap = renderTrackBitmap(context, safeWeeks, progressPct, gender)
+            views.setImageViewBitmap(R.id.widget_track_canvas, trackBitmap)
 
             val intent = Intent(context, MainActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(

@@ -71,24 +71,31 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Center Progress Area -->
+    <!-- Center 8-Bit Pixel Art Track Area -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/widget_track_canvas"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="Baby Track Preview"
+            android:scaleType="fitCenter" />
 
         <ProgressBar
             android:id="@+id/widget_progress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:max="100"
-            android:progress="65"
-            android:progressTint="#F472B6" />
+            android:progress="65" />
     </LinearLayout>
 
     <!-- Bottom Fruit & Stats Row -->
