@@ -153,10 +153,6 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             val palette = getPalette(gender)
             val isGirl = gender == "girl"
 
-            // Dark rounded container background
-            paint.color = 0xAA0A0F1A.toInt()
-            canvas.drawRoundRect(0f, 0f, width.toFloat(), height.toFloat(), 16f, 16f, paint)
-
             val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
             val isNight = hour < 7 || hour >= 20
 
@@ -167,10 +163,8 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             val trackEndX = width - cribW - 20f
             val trackLen = max(20f, trackEndX - trackStartX)
 
-            // Night sky stars and moon
+            // Night sky stars and moon (transparent overlay)
             if (isNight) {
-                paint.color = 0x99090D16.toInt()
-                canvas.drawRect(0f, 0f, width.toFloat(), groundY + 8f, paint)
                 drawSprite(canvas, moonSprite, trackEndX - 30f, 6f, 1.8f, palette, paint)
 
                 paint.color = 0xDDFDE047.toInt()
