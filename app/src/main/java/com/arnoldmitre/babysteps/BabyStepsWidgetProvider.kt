@@ -31,6 +31,16 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         val action = intent.action ?: return
+        if (action == ACTION_TOGGLE_DANCE) {
+            val prefs = context.getSharedPreferences("baby_steps_prefs", Context.MODE_PRIVATE)
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+            val isAudioActive = audioManager?.isMusicActive == true
+            val currentManual = prefs.getBoolean("manualDance", false)
+            val newDance = if (isAudioActive) true else !currentManual
+            prefs.edit().putBoolean("manualDance", newDance).apply()
+            updateAllWidgets(context)
+            return
+        }
         if (action.contains("playstate", ignoreCase = true) ||
             action.contains("metachanged", ignoreCase = true) ||
             action.contains("playback", ignoreCase = true) ||
@@ -41,6 +51,8 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
+
+        const val ACTION_TOGGLE_DANCE = "com.arnoldmitre.babysteps.ACTION_TOGGLE_DANCE"
 
         // 4 Crawling Animation Frames (18x13)
         private val crawl1 = arrayOf(
@@ -464,9 +476,15 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             val isBoy = gender == "boy"
             val icon = if (isGirl) "🎀" else if (isBoy) "🧢" else "👶"
 
-            // Check if audio / music is currently playing on Android!
+            // Check if audio / music is currently playing on Android or manually toggled!
             val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
-            val isMusicPlaying = audioManager?.isMusicActive == true
+            val isAudioActive = audioManager?.isMusicActive == true
+            val manualDance = prefs.getBoolean("manualDance", false)
+            val isMusicPlaying = isAudioActive || manualDance
+
+            try {
+                context.startService(Intent(context, AudioMonitorService::class.java))
+            } catch (_: Exception) {}
 
             val nowMs = System.currentTimeMillis()
             var safeWeeks = weeks
@@ -511,6 +529,7 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.tv_widget_week, "$icon WK $safeWeeks")
             views.setTextViewText(R.id.tv_widget_trimester, trimester)
             views.setTextViewText(R.id.tv_widget_name, "$icon ${babyName.uppercase(Locale.US)}")
+            views.setTextViewText(R.id.badge_dance_toggle, if (isMusicPlaying) "🎶 DANCING" else "🎵 GROOVE")
             views.setTextViewText(R.id.tv_widget_days_left, "${daysLeft}d left (${weeksLeft}w)")
             views.setProgressBar(R.id.widget_progress, 100, progressPct, false)
             val danceNote = if (isMusicPlaying) " 🎶" else ""
@@ -547,6 +566,17 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
             views.setOnClickPendingIntent(R.id.widget_root, pendingIntent)
+
+            // Direct tap on Baby Track Flipper or Groove Badge toggles dancing mode!
+            val danceIntent = Intent(context, BabyStepsWidgetProvider::class.java).apply {
+                this.action = ACTION_TOGGLE_DANCE
+            }
+            val dancePendingIntent = PendingIntent.getBroadcast(
+                context, 101, danceIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            views.setOnClickPendingIntent(R.id.widget_flipper, dancePendingIntent)
+            views.setOnClickPendingIntent(R.id.badge_dance_toggle, dancePendingIntent)
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }

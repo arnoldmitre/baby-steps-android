@@ -36,6 +36,10 @@ class MainActivity : AppCompatActivity() {
 
         webView.addJavascriptInterface(WebAppInterface(this), "AndroidBridge")
         webView.loadUrl("file:///android_asset/index.html")
+
+        try {
+            startService(Intent(this, AudioMonitorService::class.java))
+        } catch (_: Exception) {}
     }
 
     inner class WebAppInterface(private val context: Context) {

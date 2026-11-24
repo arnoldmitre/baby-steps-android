@@ -66,6 +66,20 @@
                 android:textSize="10sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/badge_dance_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/badge_bg"
+                android:fontFamily="monospace"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="3dp"
+                android:text="🎵 GROOVE"
+                android:textColor="#F472B6"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="1dp"
