@@ -8,7 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
+import android.media.AudioManager
+import android.view.View
 import android.widget.RemoteViews
 import org.json.JSONArray
 import java.text.SimpleDateFormat
@@ -25,9 +28,22 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
         }
     }
 
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        val action = intent.action ?: return
+        if (action.contains("playstate", ignoreCase = true) ||
+            action.contains("metachanged", ignoreCase = true) ||
+            action.contains("playback", ignoreCase = true) ||
+            action == Intent.ACTION_USER_PRESENT ||
+            action == Intent.ACTION_SCREEN_ON) {
+            updateAllWidgets(context)
+        }
+    }
+
     companion object {
 
-        private val crawlSprite = arrayOf(
+        // 4 Crawling Animation Frames (18x13)
+        private val crawl1 = arrayOf(
             ".........booby....",
             ".........ybbssy...",
             "........yssssssy..",
@@ -43,7 +59,121 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             "...ss...ss.ss.ss.."
         )
 
-        private val sleepSprite = arrayOf(
+        private val crawl2 = arrayOf(
+            ".........booby....",
+            ".........ybbssy...",
+            "........yssssssy..",
+            ".......yssskwssy..",
+            ".......yssskkssss.",
+            ".......ysccsssss..",
+            ".......ssssssmss..",
+            "...wwwwwwsssss....",
+            "..wwwwwwwwssss....",
+            ".wwuwwwwww.ssss...",
+            ".wdddddddw..sss...",
+            "..sssssddw..sss...",
+            "...ssss.....sss..."
+        )
+
+        private val crawl3 = arrayOf(
+            ".........booby....",
+            ".........ybbssy...",
+            "........yssssssy..",
+            ".......yssskwssy..",
+            ".......yssskkssss.",
+            ".......ysccsssss..",
+            ".......ssssssmss..",
+            "...wwwwwwsssss....",
+            "..wwwwwwwwssss....",
+            ".wwuwwwwww..ssss..",
+            ".wdddddddw..ssss..",
+            "..sssssddw.ee.ss..",
+            "..ssss..ss.ee.ss.."
+        )
+
+        private val crawl4 = arrayOf(
+            ".........booby....",
+            ".........ybbssy...",
+            "........yssssssy..",
+            ".......yssskwssy..",
+            ".......yssskkssss.",
+            ".......ysccsssss..",
+            ".......ssssssmss..",
+            "...wwwwwwsssss....",
+            "..wwwwwwwwssss....",
+            ".wwuwwwwww.ssss...",
+            ".wdddddddw..sss...",
+            "..sssssddw..sss...",
+            "....ssss....sss..."
+        )
+
+        // 4 Music Dance Animation Frames (18x13)
+        private val musicCrawl1 = arrayOf(
+            ".........booby....",
+            ".........ybbssy.s.",
+            "........yssssssys.",
+            ".......yssskwssy..",
+            ".......yssskkssss.",
+            ".......ysccsssss..",
+            ".......ssssssmss..",
+            "...wwwwwwsssss....",
+            "..wwwwwwwwssss....",
+            ".wwuwwwwww.ss.....",
+            ".wdddddddw.ss.....",
+            "..sssssddw.ss.....",
+            "...ss...ss.ss....."
+        )
+
+        private val musicCrawl2 = arrayOf(
+            ".........booby....",
+            ".........ybbssy...",
+            "........yssssssy..",
+            ".......yssskwssy..",
+            ".......yssskkssss.",
+            ".......ysccsssss..",
+            ".......ssssssmmm..",
+            "...wwwwwwssssss...",
+            "..wwwwwwwwssss....",
+            ".wwuwwwwww.ssss...",
+            ".wdddddddw..sss...",
+            "..sssssddw..sss...",
+            "...ssss.....sss..."
+        )
+
+        private val musicCrawl3 = arrayOf(
+            ".........booby....",
+            ".......ssybbssy...",
+            ".......ssyssssssy.",
+            ".......yssskwssy..",
+            ".......yssskkssss.",
+            ".......ysccsssss..",
+            ".......ssssssmss..",
+            "...wwwwwwsssss....",
+            "..wwwwwwwwssss....",
+            ".wwuwwwwww..ssss..",
+            ".wdddddddw..ssss..",
+            "..sssssddw.ee.ss..",
+            "..ssss..ss.ee.ss.."
+        )
+
+        private val musicCrawl4 = arrayOf(
+            ".........booby....",
+            ".........ybbssy...",
+            "........yssssssy..",
+            ".......yssskwssy..",
+            ".......yssskkssss.",
+            ".......ysccsssss..",
+            ".......ssssssmmm..",
+            "...wwwwwwssssss...",
+            "..wwwwwwwwssss....",
+            ".wwuwwwwww.ssss...",
+            ".wdddddddw..sss...",
+            "..sssssddw..sss...",
+            "....ssss....sss..."
+        )
+
+        // 2 Sleep Animation Frames (18x13)
+        private val sleep1 = arrayOf(
             ".........booby....",
             ".........ybbssy...",
             "........yssssssy..",
@@ -53,6 +183,22 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             ".......ssssssmss..",
             "..wwwwwwwsssss....",
             ".wwwwwwwwwssss....",
+            ".wwuwwwwww.sssss..",
+            ".wdddddddw..sssss.",
+            "..sssssddw...sss..",
+            "...sssssss........"
+        )
+
+        private val sleep2 = arrayOf(
+            ".........booby....",
+            ".........ybbssy...",
+            "........yssssssy..",
+            ".......ysssssssy..",
+            ".......yssskkkss..",
+            ".......ysccsssss..",
+            ".......ssssssmss..",
+            "...wwwwwwsssss....",
+            "..wwwwwwwwssss....",
             ".wwuwwwwww.sssss..",
             ".wdddddddw..sssss.",
             "..sssssddw...sss..",
@@ -85,6 +231,22 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             ".yy....",
             "..yy...",
             "...yyyy"
+        )
+
+        private val noteA = arrayOf(
+            "...p.",
+            "...p.",
+            "...p.",
+            ".ppp.",
+            ".ppp."
+        )
+
+        private val noteB = arrayOf(
+            "..ppppp",
+            "..p...p",
+            "..p...p",
+            "ppp.ppp",
+            "ppp.ppp"
         )
 
         private val smallZSprite = arrayOf(
@@ -143,7 +305,26 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             }
         }
 
-        private fun renderTrackBitmap(context: Context, safeWeeks: Int, progressPct: Int, gender: String): Bitmap {
+        // Render Background Plate with customizable One UI transparency
+        private fun renderBackgroundPlate(width: Int, height: Int, transparency: Int): Bitmap? {
+            if (transparency >= 100) return null
+            val alpha = ((100 - transparency) / 100f * 240).toInt().coerceIn(0, 255)
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val paint = Paint().apply { isAntiAlias = true }
+            paint.color = Color.argb(alpha, 15, 23, 42)
+            canvas.drawRoundRect(0f, 0f, width.toFloat(), height.toFloat(), 20f, 20f, paint)
+            return bitmap
+        }
+
+        // Render One of the 4 Animated Track Frames
+        private fun renderTrackBitmap(
+            safeWeeks: Int,
+            progressPct: Int,
+            gender: String,
+            frameIndex: Int,
+            isMusicPlaying: Boolean
+        ): Bitmap {
             val width = 600
             val height = 130
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -163,8 +344,8 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             val trackEndX = width - cribW - 20f
             val trackLen = max(20f, trackEndX - trackStartX)
 
-            // Night sky stars and moon (transparent overlay)
-            if (isNight) {
+            // Night sky stars and moon (transparent background)
+            if (isNight && !isMusicPlaying) {
                 drawSprite(canvas, moonSprite, trackEndX - 30f, 6f, 1.8f, palette, paint)
 
                 paint.color = 0xDDFDE047.toInt()
@@ -194,9 +375,10 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             val cribY = groundY - 15f * cribScale + 6f
             drawSprite(canvas, cribSprite, cribX, cribY, cribScale, palette, paint)
 
-            // Floating heart above crib
+            // Floating heart above crib (bobs with animation frame)
+            val heartOffset = if (frameIndex % 2 == 0) -8f else -11f
             paint.color = if (isGirl) 0xFFFB7185.toInt() else 0xFFEF4444.toInt()
-            canvas.drawRect(cribX + 7f * cribScale, cribY - 8f, cribX + 7f * cribScale + 5f, cribY - 3f, paint)
+            canvas.drawRect(cribX + 7f * cribScale, cribY + heartOffset, cribX + 7f * cribScale + 5f, cribY + heartOffset + 5f, paint)
 
             // Baby position on track
             val babyPct = (progressPct / 100f).coerceIn(0f, 1f)
@@ -207,16 +389,56 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
                 safeWeeks <= 36 -> 2.7f
                 else -> 3.0f
             }
-            val babyY = groundY - 13f * scaleFactor + 6f
-            val sprite = if (isNight) sleepSprite else crawlSprite
-            drawSprite(canvas, sprite, babyX, babyY, scaleFactor, palette, paint)
 
-            // Floating Zzz if sleeping at night
-            if (isNight) {
-                val zX = babyX + 16f * scaleFactor
-                val zY = groundY - 14f * scaleFactor - 4f
-                drawSprite(canvas, smallZSprite, zX, zY, 1.4f, palette, paint)
+            // Select sprite and motion bob based on state and frame
+            val sprite: Array<String>
+            val bobY: Float
+
+            if (isMusicPlaying) {
+                // Dance groove animation
+                sprite = when (frameIndex % 4) {
+                    0 -> musicCrawl1
+                    1 -> musicCrawl2
+                    2 -> musicCrawl3
+                    else -> musicCrawl4
+                }
+                bobY = when (frameIndex % 4) {
+                    0 -> 0f
+                    1 -> 3f
+                    2 -> -3f
+                    else -> 4f
+                }
+
+                // Floating musical notes dancing around baby
+                val noteOffset = (frameIndex * 6f) % 20f
+                drawSprite(canvas, noteA, babyX + 16f * scaleFactor, groundY - 18f * scaleFactor - noteOffset, 1.8f, palette, paint)
+                drawSprite(canvas, noteB, babyX - 8f, groundY - 14f * scaleFactor - ((noteOffset + 8f) % 18f), 1.6f, palette, paint)
+            } else if (isNight) {
+                // Peaceful sleep breathing cycle
+                sprite = if (frameIndex % 2 == 0) sleep1 else sleep2
+                bobY = if (frameIndex % 2 == 0) 0f else 1.5f
+
+                // Drifting Zzz
+                val zOffset = (frameIndex * 5f) % 18f
+                drawSprite(canvas, smallZSprite, babyX + 16f * scaleFactor, groundY - 14f * scaleFactor - zOffset, 1.4f, palette, paint)
+            } else {
+                // Natural 4-frame cross-crawling cycle
+                sprite = when (frameIndex % 4) {
+                    0 -> crawl1
+                    1 -> crawl2
+                    2 -> crawl3
+                    else -> crawl4
+                }
+                bobY = when (frameIndex % 4) {
+                    0 -> 0f
+                    1 -> 2.5f
+                    2 -> 0f
+                    else -> 3f
+                }
             }
+
+            val babyY = groundY - 13f * scaleFactor + 6f + bobY
+            drawSprite(canvas, sprite, babyX, babyY, scaleFactor, palette, paint)
 
             return bitmap
         }
@@ -236,10 +458,15 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             val gender = prefs.getString("gender", "girl") ?: "girl"
             val weeks = prefs.getInt("weeks", 26)
             val dueDateStr = prefs.getString("dueDate", "") ?: ""
+            val transparency = prefs.getInt("widgetTransparency", 100) // Default 100% transparent
 
             val isGirl = gender == "girl"
             val isBoy = gender == "boy"
             val icon = if (isGirl) "🎀" else if (isBoy) "🧢" else "👶"
+
+            // Check if audio / music is currently playing on Android!
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+            val isMusicPlaying = audioManager?.isMusicActive == true
 
             val nowMs = System.currentTimeMillis()
             var safeWeeks = weeks
@@ -286,12 +513,33 @@ class BabyStepsWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.tv_widget_name, "$icon ${babyName.uppercase(Locale.US)}")
             views.setTextViewText(R.id.tv_widget_days_left, "${daysLeft}d left (${weeksLeft}w)")
             views.setProgressBar(R.id.widget_progress, 100, progressPct, false)
-            views.setTextViewText(R.id.tv_widget_fruit, "$icon $babyName • $fruitName ($fruitLength)")
+            val danceNote = if (isMusicPlaying) " 🎶" else ""
+            views.setTextViewText(R.id.tv_widget_fruit, "$icon $babyName • $fruitName ($fruitLength)$danceNote")
             views.setTextViewText(R.id.tv_widget_percent, "$progressPct%")
 
-            // Render and set the 8-bit Track Canvas with crawling baby & crib
-            val trackBitmap = renderTrackBitmap(context, safeWeeks, progressPct, gender)
-            views.setImageViewBitmap(R.id.widget_track_canvas, trackBitmap)
+            // Dynamic Background Plate for One UI Transparency
+            val bgPlate = renderBackgroundPlate(600, 240, transparency)
+            if (bgPlate != null) {
+                views.setImageViewBitmap(R.id.widget_bg_plate, bgPlate)
+                views.setViewVisibility(R.id.widget_bg_plate, View.VISIBLE)
+            } else {
+                views.setViewVisibility(R.id.widget_bg_plate, View.GONE)
+            }
+
+            // Render all 4 frames of the moving / dancing baby for ViewFlipper!
+            val frame0 = renderTrackBitmap(safeWeeks, progressPct, gender, 0, isMusicPlaying)
+            val frame1 = renderTrackBitmap(safeWeeks, progressPct, gender, 1, isMusicPlaying)
+            val frame2 = renderTrackBitmap(safeWeeks, progressPct, gender, 2, isMusicPlaying)
+            val frame3 = renderTrackBitmap(safeWeeks, progressPct, gender, 3, isMusicPlaying)
+
+            views.setImageViewBitmap(R.id.widget_frame_0, frame0)
+            views.setImageViewBitmap(R.id.widget_frame_1, frame1)
+            views.setImageViewBitmap(R.id.widget_frame_2, frame2)
+            views.setImageViewBitmap(R.id.widget_frame_3, frame3)
+
+            // Speed up flip interval when grooving to music (250ms), normal crawl (350ms)
+            val flipSpeed = if (isMusicPlaying) 260 else 360
+            views.setInt(R.id.widget_flipper, "setFlipInterval", flipSpeed)
 
             val intent = Intent(context, MainActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(

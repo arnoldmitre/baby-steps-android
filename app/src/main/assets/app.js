@@ -12,6 +12,7 @@
     dateMode: true,
     sleepMode: "auto", // 'auto' | 'sleep' | 'awake'
     isMusicActive: false,
+    widgetTransparency: 100,
     milestones: []
   };
 
@@ -631,6 +632,19 @@
     document.getElementById("dateSummaryText").textContent =
       `Calculated: ${info.weeks} weeks pregnant (${info.daysLeft}d left)`;
     document.getElementById("dateSummaryPct").textContent = `${info.progressPct}%`;
+
+    // Transparency UI
+    const tSlider = document.getElementById("transparencySlider");
+    if (tSlider) tSlider.value = state.widgetTransparency;
+    const tLabel = document.getElementById("lblTransparency");
+    if (tLabel) {
+      tLabel.textContent =
+        state.widgetTransparency >= 100
+          ? "100% (CLEAR)"
+          : state.widgetTransparency === 0
+          ? "0% (SOLID)"
+          : `${state.widgetTransparency}%`;
+    }
   }
 
   // Load Milestones JSON
@@ -832,6 +846,44 @@
       savePref("dueDate", "");
       updateUI();
     });
+
+    // Transparency Slider & Presets
+    const tSlider = document.getElementById("transparencySlider");
+    if (tSlider) {
+      tSlider.addEventListener("input", (e) => {
+        state.widgetTransparency = parseInt(e.target.value, 10);
+        savePref("widgetTransparency", state.widgetTransparency);
+        updateUI();
+      });
+    }
+
+    document.getElementById("transClear")?.addEventListener("click", () => {
+      callHaptic();
+      state.widgetTransparency = 100;
+      savePref("widgetTransparency", 100);
+      updateUI();
+    });
+
+    document.getElementById("transGlass")?.addEventListener("click", () => {
+      callHaptic();
+      state.widgetTransparency = 75;
+      savePref("widgetTransparency", 75);
+      updateUI();
+    });
+
+    document.getElementById("transTint")?.addEventListener("click", () => {
+      callHaptic();
+      state.widgetTransparency = 50;
+      savePref("widgetTransparency", 50);
+      updateUI();
+    });
+
+    document.getElementById("transSolid")?.addEventListener("click", () => {
+      callHaptic();
+      state.widgetTransparency = 0;
+      savePref("widgetTransparency", 0);
+      updateUI();
+    });
   }
 
   // Restore State from Preferences
@@ -842,6 +894,8 @@
     if (!isNaN(savedWeeks)) state.weeks = savedWeeks;
     state.dueDate = getPref("dueDate", "2027-03-04");
     state.startDate = getPref("startDate", "2026-05-28");
+    const savedTrans = parseInt(getPref("widgetTransparency", "100"), 10);
+    if (!isNaN(savedTrans)) state.widgetTransparency = savedTrans;
     calculateDates();
   }
 

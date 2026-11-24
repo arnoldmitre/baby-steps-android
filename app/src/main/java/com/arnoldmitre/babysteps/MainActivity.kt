@@ -59,13 +59,24 @@ class MainActivity : AppCompatActivity() {
         @JavascriptInterface
         fun savePreference(key: String, value: String) {
             val prefs = context.getSharedPreferences("baby_steps_prefs", Context.MODE_PRIVATE)
-            prefs.edit().putString(key, value).apply()
+            val editor = prefs.edit()
+            val intVal = value.toIntOrNull()
+            if (intVal != null && (key == "widgetTransparency" || key == "weeks")) {
+                editor.putInt(key, intVal)
+            } else {
+                editor.putString(key, value)
+            }
+            editor.apply()
             BabyStepsWidgetProvider.updateAllWidgets(context)
         }
 
         @JavascriptInterface
         fun getPreference(key: String, defaultValue: String): String {
             val prefs = context.getSharedPreferences("baby_steps_prefs", Context.MODE_PRIVATE)
+            if (key == "widgetTransparency" || key == "weeks") {
+                val defInt = defaultValue.toIntOrNull() ?: 100
+                return prefs.getInt(key, defInt).toString()
+            }
             return prefs.getString(key, defaultValue) ?: defaultValue
         }
 

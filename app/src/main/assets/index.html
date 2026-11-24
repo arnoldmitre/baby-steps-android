@@ -106,9 +106,27 @@
       <div class="card-row">
         <div>
           <div class="label">MUSIC BEAT REACTION</div>
-          <div class="sub-label">Preview baby bouncing & dancing to the rhythm</div>
+          <div class="sub-label">Baby automatically dances when music plays!</div>
         </div>
         <button class="toggle-btn action-btn" id="btnMusicPreview">🎵 Preview Beat</button>
+      </div>
+    </div>
+
+    <!-- One UI Widget Transparency Settings Card -->
+    <div class="card settings-card">
+      <div class="card-row">
+        <div>
+          <div class="label">ONE UI WIDGET TRANSPARENCY</div>
+          <div class="sub-label">Adjust widget background glass opacity</div>
+        </div>
+        <span class="chip-badge" id="lblTransparency">100% (CLEAR)</span>
+      </div>
+      <input type="range" min="0" max="100" value="100" class="slider" id="transparencySlider" />
+      <div class="presets-row" style="margin-top: 4px;">
+        <button class="preset-btn" id="transClear">100% (Clear)</button>
+        <button class="preset-btn" id="transGlass">75% (Glass)</button>
+        <button class="preset-btn" id="transTint">50% (Tint)</button>
+        <button class="preset-btn" id="transSolid">0% (Solid)</button>
       </div>
     </div>
 
